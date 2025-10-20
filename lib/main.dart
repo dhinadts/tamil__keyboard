@@ -1,4 +1,216 @@
 import 'package:flutter/material.dart';
+import 'package:vibration/vibration.dart';
+import 'package:google_fonts/google_fonts.dart';
+
+void main() {
+  runApp(TamilKeyboardApp());
+}
+
+class TamilKeyboardApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Tamil Keyboard',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+        fontFamily: GoogleFonts.notoSansTamil().fontFamily,
+      ),
+      home: KeyboardSettingsScreen(),
+      debugShowCheckedModeBanner: false,
+    );
+  }
+}
+
+class KeyboardSettingsScreen extends StatefulWidget {
+  @override
+  _KeyboardSettingsScreenState createState() => _KeyboardSettingsScreenState();
+}
+
+class _KeyboardSettingsScreenState extends State<KeyboardSettingsScreen> {
+  bool _vibrationEnabled = true;
+  bool _soundEnabled = false;
+  double _keyboardHeight = 200.0;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('தமிழ் விசைப்பலகை அமைப்புகள்'),
+        backgroundColor: Colors.blue[700],
+      ),
+      body: ListView(
+        padding: EdgeInsets.all(16),
+        children: [
+          _buildHeader(),
+          SizedBox(height: 20),
+          _buildEnableKeyboardCard(),
+          SizedBox(height: 20),
+          _buildSettingsCard(),
+          SizedBox(height: 20),
+          _buildKeyboardPreview(),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildHeader() {
+    return Card(
+      child: Padding(
+        padding: EdgeInsets.all(16),
+        child: Column(
+          children: [
+            Icon(Icons.keyboard, size: 64, color: Colors.blue),
+            SizedBox(height: 10),
+            Text(
+              'தமிழ் விசைப்பலகை',
+              style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+                fontFamily: GoogleFonts.notoSansTamil().fontFamily,
+              ),
+            ),
+            SizedBox(height: 10),
+            Text(
+              'செல்லுபடியாக்க: அமைப்புகள் > மொழி & உள்ளீடு > விசைப்பலகைகள் > தமிழ் விசைப்பலகை',
+              textAlign: TextAlign.center,
+              style: TextStyle(fontFamily: 'NotoSansTamil'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildEnableKeyboardCard() {
+    return Card(
+      child: Padding(
+        padding: EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'விசைப்பலகையை இயக்கு',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+            SizedBox(height: 10),
+            Text('அமைப்புகளில் சென்று தமிழ் விசைப்பலகையை இயக்கவும்'),
+            SizedBox(height: 10),
+            ElevatedButton(
+              onPressed: _openKeyboardSettings,
+              child: Text('விசைப்பலகை அமைப்புகள்'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildSettingsCard() {
+    return Card(
+      child: Padding(
+        padding: EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'அமைப்புகள்',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+            SizedBox(height: 10),
+            SwitchListTile(
+              title: Text('அதிர்வு'),
+              subtitle: Text('விசை அழுத்தத்தில் அதிர்வு'),
+              value: _vibrationEnabled,
+              onChanged: (value) {
+                setState(() {
+                  _vibrationEnabled = value;
+                });
+              },
+            ),
+            SwitchListTile(
+              title: Text('ஒலி'),
+              subtitle: Text('விசை அழுத்தத்தில் கிளிக் ஒலி'),
+              value: _soundEnabled,
+              onChanged: (value) {
+                setState(() {
+                  _soundEnabled = value;
+                });
+              },
+            ),
+            SizedBox(height: 10),
+            Text('விசைப்பலகை உயரம்'),
+            Slider(
+              value: _keyboardHeight,
+              min: 150.0,
+              max: 300.0,
+              divisions: 5,
+              label: '${_keyboardHeight.round()}',
+              onChanged: (value) {
+                setState(() {
+                  _keyboardHeight = value;
+                });
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildKeyboardPreview() {
+    return Card(
+      child: Padding(
+        padding: EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'முன்தோற்றம்',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+            SizedBox(height: 10),
+            Container(
+              height: 120,
+              decoration: BoxDecoration(
+                border: Border.all(color: Colors.grey),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Center(
+                child: Text(
+                  'தமிழ் விசைப்பலகை முன்தோற்றம்',
+                  style: TextStyle(
+                      fontFamily: GoogleFonts.notoSansTamil().fontFamily),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void _openKeyboardSettings() {
+    // This would typically open system keyboard settings
+    // For now, we'll show a dialog
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text('விசைப்பலகை அமைப்புகள்'),
+        content: Text(
+            'அமைப்புகள் > மொழி & உள்ளீடு > விசைப்பலகைகள் சென்று "தமிழ் விசைப்பலகை" இயக்கவும்'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text('சரி'),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+
+/* import 'package:flutter/material.dart';
 
 void main() {
   runApp(const MyApp());
@@ -76,3 +288,4 @@ class _KeyboardDemoScreenState extends State<KeyboardDemoScreen> {
     );
   }
 }
+ */

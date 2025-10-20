@@ -10,6 +10,7 @@ android {
     compileSdk = 35
     ndkVersion = "27.0.12077973"
 
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
@@ -39,7 +40,11 @@ android {
             signingConfig = signingConfigs.getByName("debug")
         }
     }
+    buildFeatures {
+        viewBinding = true
+    }
 }
+
 
 flutter {
     source = "../.."
@@ -49,3 +54,4 @@ dependencies {
     implementation("androidx.appcompat:appcompat:1.6.1")  // Add this line
     implementation("androidx.core:core-ktx:1.12.0")       // Optional but recommended
 }
+

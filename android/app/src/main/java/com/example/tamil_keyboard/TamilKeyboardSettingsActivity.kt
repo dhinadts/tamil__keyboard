@@ -11,14 +11,17 @@ class TamilKeyboardSettingsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
 
+        // Button to open "Manage Keyboards" (to enable this keyboard)
         findViewById<Button>(R.id.btn_enable_keyboard).setOnClickListener {
             val intent = Intent(Settings.ACTION_INPUT_METHOD_SETTINGS)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
             startActivity(intent)
         }
 
+        // Button to open "Choose Input Method" (to switch to this keyboard)
         findViewById<Button>(R.id.btn_choose_keyboard).setOnClickListener {
-            val intent = Intent(Settings.ACTION_INPUT_METHOD_SUBTYPE_SETTINGS)
-            startActivity(intent)
+            val imeManager = getSystemService(INPUT_METHOD_SERVICE) as android.view.inputmethod.InputMethodManager
+            imeManager.showInputMethodPicker()
         }
     }
 }
